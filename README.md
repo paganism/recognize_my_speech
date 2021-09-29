@@ -62,6 +62,9 @@ python3 intent.py --action list
 python3 intent.py --action delete --intent_id  уникальный_intent_uuid
 ```
 
+## Пример
+Пообщаться с ботом можно в группе [vk](https://vk.com/club207322228)
+
 ## Цели проекта
 
 Код написан в учебных целях.
