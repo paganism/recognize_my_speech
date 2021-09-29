@@ -64,6 +64,7 @@ python3 intent.py --action delete --intent_id  уникальный_intent_uuid
 
 ## Пример
 Пообщаться с ботом можно в группе [vk](https://vk.com/club207322228)
+![demo_vk_bot](https://user-images.githubusercontent.com/23501624/135332494-36b2fc31-45e6-480b-ac68-d781758d6e2b.gif)
 
 ## Цели проекта
 
