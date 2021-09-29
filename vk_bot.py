@@ -5,12 +5,21 @@ import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 from dialogflow_respond_peocess import detect_intent_texts
+from log_configuration import TGBotLogHandler
+import google.api_core.exceptions
+import logging
+
+
+log = logging.getLogger(__file__)
 
 
 def bot_respond(event, vk_api):
-    respond = detect_intent_texts(
-        project_id, event.user_id, event.text, language_code
-    )
+    try:
+        respond = detect_intent_texts(
+            project_id, event.user_id, event.text, language_code
+        )
+    except google.api_core.exceptions.ServiceUnavailable:
+        log.info("DialogFlow недоступен")
     if respond.intent.is_fallback:
         return
     vk_api.messages.send(
@@ -28,6 +37,13 @@ if __name__ == "__main__":
     token = env('VK_TOKEN')
     language_code = env('LANGUAGE_CODE')
     project_id = env('PROJECT_ID')
+
+    tg_bot_token = env("TELEGRAM_TOKEN")
+    log_chat_id = env("CHAT_ID")
+
+    log.setLevel(logging.DEBUG)
+    log.addHandler(TGBotLogHandler(log_chat_id, tg_bot_token))
+    log.info('Бот vk запущен')
 
     vk_session = vk.VkApi(token=token)
     vk_api = vk_session.get_api()
