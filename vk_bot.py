@@ -14,7 +14,7 @@ log = logging.getLogger(__file__)
 
 
 def get_dataflow_respond(event, vk_api):
-    user = f'vk-{event.user.id}'
+    user = f'vk-{event.user_id}'
     respond = detect_intent_texts(
         project_id, user, event.text, language_code
     )
