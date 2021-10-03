@@ -13,13 +13,11 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def bot_respond(event, vk_api):
-    try:
-        respond = detect_intent_texts(
-            project_id, event.user_id, event.text, language_code
-        )
-    except google.api_core.exceptions.ServiceUnavailable:
-        log.info("DialogFlow недоступен")
+def get_dataflow_respond(event, vk_api):
+    user = f'vk-{event.user.id}'
+    respond = detect_intent_texts(
+        project_id, user, event.text, language_code
+    )
     if respond.intent.is_fallback:
         return
     vk_api.messages.send(
@@ -41,6 +39,10 @@ if __name__ == "__main__":
     tg_bot_token = env("TELEGRAM_TOKEN")
     log_chat_id = env("CHAT_ID")
 
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO
+    )
     log.setLevel(logging.DEBUG)
     log.addHandler(TGBotLogHandler(log_chat_id, tg_bot_token))
     log.info('Бот vk запущен')
@@ -51,4 +53,7 @@ if __name__ == "__main__":
 
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            bot_respond(event, vk_api)
+            try:
+                get_dataflow_respond(event, vk_api)
+            except google.api_core.exceptions.ServiceUnavailable:
+                log.info("DialogFlow недоступен")

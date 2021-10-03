@@ -2,12 +2,6 @@ import logging
 import telegram
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-
-
 class TGBotLogHandler(logging.Handler):
 
     def __init__(self, chat_id, tg_token):
